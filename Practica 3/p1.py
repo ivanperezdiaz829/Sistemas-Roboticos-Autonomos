@@ -97,4 +97,4 @@ for i in range(4):
     wait(100)                    # pausa para que el robot se asiente
 
 parar()
-print("Error final de rumbo:", hub.imu.heading() - 90 * 40, "grados")
+print("Error final de rumbo:", hub.imu.heading() - 90 * 4, "grados")
