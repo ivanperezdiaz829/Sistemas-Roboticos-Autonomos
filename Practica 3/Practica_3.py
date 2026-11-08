@@ -20,7 +20,7 @@ for i in range(4):
     motorLeft.run_angle(motor_velocity, float(-360*straight_turns), wait=False)
     motorRight.run_angle(motor_velocity, float(360*straight_turns), wait=True)
     # El wait se pone en el 1º False y en el 2º True para que avanza con ambos motores
-    # y luego no continue hasta terminar de avanzar.
+    # y luego no continúe hasta terminar de avanzar.
 
     # Acciona los motores para girar.
     motorLeft.run_angle(motor_velocity/2, float(-360*turn_turns), wait=False)
