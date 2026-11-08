@@ -4,6 +4,7 @@ from pybricks.parameters import Port, Direction
 from pybricks.tools import wait
 import math
 
+# Obtiene el sensor de orientación.
 hub = PrimeHub()   # hub plano: orientación por defecto válida para el IMU
 
 # Montaje en espejo: invertimos el izquierdo para que positivo = avanzar en ambos
@@ -24,18 +25,19 @@ V_GIRO_MIN = 60          # más alta por la fricción de los patines
 # --- Ganancias y rampas ---
 KP_RECTA = 5
 KP_GIRO = 8
-TOLERANCIA = 0.7         # grados de error aceptados al terminar un giro
+TOLERANCIA = 0.5         # grados de error aceptados al terminar un giro
 RAMPA_ARRANQUE = 4       # °/s de velocidad ganados por cada grado de motor recorrido
 RAMPA_FRENADO = 3        # °/s de velocidad por cada grado de motor que queda
 
 
+# Función para detener los motores.
 def parar():
     motorLeft.hold()
     motorRight.hold()
 
 
+# Función para avanzar recto mediante el sensor de orientación.
 def recta(rumbo_objetivo):
-    """Avanza un lado manteniendo el rumbo con el giroscopio."""
     motorLeft.reset_angle(0)
     motorRight.reset_angle(0)
 
@@ -45,7 +47,7 @@ def recta(rumbo_objetivo):
         if restante <= 0:
             break
 
-        # Arranque suave, velocidad de crucero y frenado suave
+        # Arranque suave, velocidad de crucero y frenado suave.
         velocidad = min(V_RECTA,
                         V_MIN_RECTA + recorrido * RAMPA_ARRANQUE,
                         max(V_MIN_RECTA, restante * RAMPA_FRENADO))
@@ -62,8 +64,8 @@ def recta(rumbo_objetivo):
     parar()
 
 
+# Gira sobre sí mismo 90º.
 def girar_a(rumbo_objetivo):
-    """Gira sobre el sitio hasta un rumbo ABSOLUTO medido por el giroscopio."""
     estable = 0
     while estable < 5:                       # ~50 ms dentro de tolerancia
         error = rumbo_objetivo - hub.imu.heading()
@@ -82,11 +84,12 @@ def girar_a(rumbo_objetivo):
     parar()
 
 
-# --- Calibración del giroscopio: hub quieto antes de empezar ---
+# Calibración del giroscopio: hub quieto antes de empezar.
 while not hub.imu.ready() or not hub.imu.stationary():
     wait(50)
 hub.imu.reset_heading(0)
 
+# Se avanza y se gira 4 veces, haciendo un cuadrado
 for i in range(4):
     rumbo = 90 * i               # rumbo absoluto del lado actual
     recta(rumbo)
